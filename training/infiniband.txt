@@ -1,0 +1,110 @@
+Running ib_mgtsim simulator:
+
+	/opt/regression/usr/share/ibmgtsim2.1.1/tests/run_ibmgtsim.py -t /tmp/ilyan/meld_fab.topo
+
+	OR:
+
+	rm -rf /tmp/osm_sim/.*;
+	IBUTILS_PATH=/opt/regression/usr /opt/regression/scenarios/templates/run_shell.py -t /opt/regression/topologies/2-ary-4-tree.topo -d /tmp/osm_sim/
+
+	run opensm : sudo   LD_PRELOAD=/opt/regression/usr/lib/libumad2sim.so IBMGTSIM_DIR=/tmp/osm_sim opensm/opensm -F /tmp/danConf.conf –e
+
+	OR:
+
+	LD_LIBRARY_PATH=/opt/regression/usr/lib python -i /opt/regression/usr/share/ibmgtsim2.1.1/tests/run_ibmgtsim.py  -t /opt/regression/topologies/4-ary-2-tree.topo
+
+	later in python shell:
+	 - run('/usr/opensm &')
+	 - help(ibmsnet)
+	 - ibmsnet.get_nodes()
+
+Running ibcongest utility:
+
+	ibcongest -l ibdiagnet2.lst -f ibdiagnet2.fdbs -R ibm_lmc_0.hsd.csv -Q ibm_lmc_0.bw.csv -s ../ibm_lmc_0.stages
+
+Opening opensm IB MC on host:
+
+	ifconfig ib0 1.1.1.1 up
+	route add -net 224.0.0.0 netmask 240.0.0.0 dev ib0
+	for i in `seq 1 100`; do ping 230.1.1.$i & done
+
+
+Ibdiagnet - performing network analysis:
+
+	/opt/ufm/opensm/bin/ibdiagnet -r				check routing quality
+
+Ibsim with pipes:
+
+	mkdir /tmp/ibsim && cd /tmp/ibsim
+	echo "" > out
+	echo "" > err
+	mkfifo in
+
+	Running ibsim:  (tail -f /tmp/ibsim/in | eval /opt/ufm/opensm/bin/ibsim -s <topology> >> /tmp/ibsim/out 2>> /tmp/ibsim/err) &
+	Giving command: echo "<command>" > /tmp/ibsim/in
+
+
+Start UFM:
+
+	/etc/init.d/ufmd start/simstart
+
+
+Installing OFED and UFM on clean machine:
+
+	http://wiki.voltaire.com/bin/view/UFM/InstallUFMOnCleanMachine
+
+
+Restarting the driver:
+
+	/etc/init.d/openibd restart
+
+
+Configuring network interfaces:
+
+	ifconfig eth1 <new_ip>			give an ip address to ethernet interface
+
+Bring a port down;
+
+	ibportstate <lid_num> <port_num> disable/enable
+
+
+Infiniband utils:
+
+	man infiniband-diags			get all diagnostic tools manual
+	ibnetdiscover				getting the current topology
+	smpquery				simulation of sending SMP MADS to the setup nodes
+	saquery					sending SA MADS to the SM manager and getting the data stored in OpenSM database
+	sminfo					SM node information
+	ibstat					show all network CAs
+	ibdev2netdev				short format of ibstat
+	ibtracert				show path between lids
+	ofed_info -s				show the installed OFED version
+	ibhosts					list all HCAs in the fabric and basic information about them
+	ibswitches				list all switches in the fabric and basic information about them
+	/usr/bin/ibv_devinfo			check device firmware version
+	/usr/bin/mstflint -d mlx4_0 q		FW verification
+	ibv_rc_pingpong [server_name]		check ping pong between server and client (client also specifies server_name)
+	ib_send_lat [server_name]		check latency between client and server
+
+Configuring 4036E Switch:
+
+	login:		ssh root@172.30.112.23
+	passwd:		br6000
+
+	>>VoltaireCli -e			enter the main menu
+
+	>>?					show all commands
+
+Creating multiple MC groups:
+
+	Host 1:
+	sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
+	route add -net 224.0.0.0 netmask 240.0.0.0 dev ib0
+	iperf -usB 225.10.10.10 (could be any MC address)
+
+	Host 2:
+	sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
+	route add -net 224.0.0.0 netmask 240.0.0.0 dev ib0
+	ping 225.10.10.10
+
+	ifconfig ib0 up			in case of ib0 down

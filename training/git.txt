@@ -1,0 +1,143 @@
+Working with GIT notes:
+
+	git notes add							add notes to head commit
+
+Working with remote repositories:
+
+	git remote add <name> <repo_path>				add a new remote repository
+	git remote -v							list all remote repositories
+	git branch -vv							list all branches and their remotes
+	git push <repo_name> :<branch_name>				delete branch from remote repository
+	git push <repo_name> <local_branch>:<remote_branch>		push local branch to some remote branch
+	git checkout -b <local_branch> <remote_repo>/<remote_branch>	pull remote branch into some local branch
+
+
+Automatically alert white spaces on any commit:
+
+	mv .git/hooks/pre-commit.sample .git/hooks/pre-commit
+
+History change:
+
+	git rebase -i HEAD~3			take 3 last commits and do one of the following: keep, remove or edit
+	git commit --amend			ammending the change
+	git rebase --continue			continue to the next commit
+
+GIT stash command:
+
+	git stash				pushing current changes to stash stack
+	git stash list				show current changes stack
+	git stash apply				apply the most recent change from stack
+	git stash apply stash@{stash_num}	apply specified change from stash stack
+	git stash -p stash@{stash_num}		show specified stash from stack
+	git stash pop				apply and remove the last item from stash stack
+	git stash drop stash@{stash_num}	delete specified stash from stack
+
+MOFED build:
+
+	git clone  /mswg/git/build.git
+	cd build
+	./build.pl --version 2.0-9.9.9 --daily -d OFED-internal -p packages-mlnx-ofed-2.0/ --skip-postbuild --no-db
+
+Sending mails with GIT:
+
+	git send-email  --smtp-server labmailer.lab.mtl.com --smtp-server-port=25 --cc linux-rdma@vger.kernel.org --to <maintainer_adrress>
+
+	configurations that have to be done before:
+
+		git config --global sendemail.from = Ilya Nelkenbaum <ilyan@mellanox.com>
+		git config --global sendemail.smtpserver=labmailer.lab.mtl.com
+		git config --global sendemail.serverport=25
+
+Using GIT integrated into GERRIT:
+
+	git clone ssh://ilyan@r-webdev02.lab.mtl.com:29418/ib_mgmt/opensm					clone an updated repository
+	scp -p -P 29418 ilyan@r-webdev02.lab.mtl.com:hooks/commit-msg .git/hooks/				get the GIT hook for change-ID generation
+	git push ssh://ilyan@r-webdev02.lab.mtl.com:29418/ib_mgmt/opensm HEAD:refs/for/<branch_name>		push changes to temporary GERRIT repository (for / heads / tags)
+
+	ssh-keygen -t rsa -C "your_email@example.com"								create public/private rsa key pair
+	cat ~/.ssh/id_rsa.pub											get server public RSA key for SSH
+
+Pushing to GIT repository:
+
+	git push				push to repository defined in 'git var -l'
+
+	git push ssh://alexne@sol/githome/alexne/scm/<package_name>.git/					push to git://sol.mtl.com/alexne/* repository
+	git push ssh://alexne@sol/githome/alexne/scm/<package_name>.git/ +<commit>^:<branch_name>		go 1 commit back in remote commit
+
+Getting new GIT repository:
+
+	git clone [the link to the repository] -b [the branch name] [optional: the name of the new directory to create]
+
+Getting GIT info:
+
+	git log				show the history of patches that were applied
+	git status			show git tree working status (mostly untracked files)
+	git show HEAD			show the current HEAD patch
+	git var -l			show the current GIT configuration
+	git diff			show the difference between the last commit and the current code
+	git status			show the current GIT status
+	git branch -a			show all available branches
+	git blame [file name]		get the creator of a file
+	git diff --staged		see difference for staged files only
+
+GIT merging:
+
+	The difference in commits between father and son branches:
+
+		[1] Checkout the son branch
+		[2] git cherry -v <father_branch>
+		OR:
+			git log --pretty=oneline <branch1>..<branch2>
+
+	The difference in files between branches:
+
+		git diff --stat --color <branch1>..<branch2>
+
+	Making patches out of branches differences:
+
+		git format-patch <branch1>..<branch2>
+
+
+GIT commands:
+
+	git add [file name]						add new file to the repository
+	git add -u							update all files that are already in working tree
+	git add -i							interactive staging of modified files
+	git add -p							interactive staging of modified files with option to choose what to stage
+	git rm  [file name]						remove a file from the repository
+	git commit -as							add changes done using the signature line of the commiter
+	git commit --amend						change last commit message
+	git checkout [the name of wanted branch]			goto to a specified branch or create a new one (in case of new one add -b flag before branch name)
+	git reset --hard HEAD^						reset the changes according to the HEAD pointer(^ = -1) or HEAD~3 (3 revisions back)
+	git format-patch -n1						create a patch out of the last commit to the local repository
+	git apply [the patch name]					apply the specified patch without making commit
+	git am [patch name]						apply a given patch and make a commit (--signoff    to add an additional signature)
+	git am --reject [patch name]					apply a patch with possibility to failure
+	git am --whitespace=strip [patch name]				apply a patch without the whitespaces
+	git revert [commit number]					revert a specified commit
+	git pull							update all branches from the repository
+	git rebase -i [commit]						take out a commit from the middle
+	git tag								show all tags that exists (important versioning milestones)
+	git tag -a <tag_name> -m <tag_message>	[commit_hash]		creating new tag
+	git format-patch -1 <SHA-1>					making a patch out of a specific commit (--cover-letter  option for cover patch)
+	git mv file_from file_to					renaming files
+
+GIT tricks:
+
+	git log --follow -p <file_name>							show file all history changes
+
+
+Installing GIT man pages:
+
+	wget http://git-core.googlecode.com/files/<latest git man pages version>	get the GIT compressed man pages
+	tar -zxvpf <GZ_man_pages_file_name> -C /usr/local/share/man			extract to the global man pages directory
+
+
+Still not used by me commands:
+
+	git rebase				allows to combine several commits into one commit
+
+
+Appendix:
+
+	.gitconfig				configuration file sitting in the user home directory

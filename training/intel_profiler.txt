@@ -1,0 +1,17 @@
+Intel Profiler:
+
+Running:
+	/opt/intel/vtune_amplifier_xe/bin64/amplxe-cl    -collect hotspots -r res  ./a.out
+
+Finalizing:
+	/opt/intel/vtune_amplifier_xe/bin64/amplxe-cl -finalize -r res/ -search-dir all=.
+
+Running GUI (from moba-xterm):
+	/opt/intel/vtune_amplifier_xe/bin64/amplxe-gui
+
+
+Sasha sources:
+
+	/.autodirect/mtrswgwork/ilyan/install/vtune_amplifier_xe_2013_update5/vtune_amplifier_xe_2013_update5
+
+	Serial Number:    FGGW-FNHWFLJ2

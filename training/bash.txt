@@ -1,0 +1,134 @@
+#######################################################################
+First script line:
+
+	#!/bin/bash				have to appear in each script
+
+	Simple for loop example:
+	-------------------------------------------------------------------
+		#!/bin/bash
+
+		# first.sh
+		# This files looks through all the files in the current
+		# directory for the string Morning, and then displays those
+		# files to the standart output.
+
+		for file in *
+		do
+			if grep -q Morning $file
+			then
+				more $file
+			fi
+		done
+
+		exit 0
+	-------------------------------------------------------------------
+#######################################################################
+Script built-in parameters:
+
+	$1, $2, ...		the parameters given to script
+	$*			a list of all parameters given separated by $IFS environment variable
+	$@			the same as $* but without using the $IFS (separated by spaces)
+
+#######################################################################
+IF condition:
+
+	if condition
+	then
+		statements
+	elif condition
+		statements
+	else
+		statements
+	fi
+
+	Checking file existence example:
+	-------------------------------------------------------------------
+	if [ -f <file_name> ]
+	then
+		do something
+	fi
+	-------------------------------------------------------------------
+	File conditional checks:
+		-d file		true if the file is a directory
+		-e file		true if the file exists
+		-f file		true if the file is a regular file
+		-r file		true if the file is readable
+		-w file		true if the file is writable
+		-x file		true if the file is executable
+		-s file		true if the file has non-zero size
+
+	>>help test		for more command information
+#######################################################################
+LOOP patterns:
+
+	-------------------------------------------------------------------
+	for <var> in <val_list>
+	do
+		statements
+	done
+	-------------------------------------------------------------------
+	-------------------------------------------------------------------
+	while condition do
+		statements
+	done
+	-------------------------------------------------------------------
+	-------------------------------------------------------------------
+	until condition
+	do
+		statements
+	done
+	-------------------------------------------------------------------
+	-------------------------------------------------------------------
+	case variable in
+		pattern [ | pattern] ...) statements;;
+		pattern [ | pattern] ...) statements;;
+	esac
+
+	example:
+		case "$time_of_the_day" in
+			yes) echo "Good Morning";;
+			no ) echo "Good Afternoon";;
+			y  ) echo "Good Morning";;
+			n  ) echo "Good Afternoon;;
+			*  ) echo "Sorry, answer not recognized";;
+		esac
+
+	the same example but shorter:
+		case "$time_of_the_day" in
+			yes | y | Yes | YES) echo "Good Morning";;
+			n* | N* ) echo "Good Afternoon";;
+			*  ) echo "Sorry, answer not recognized";;
+		esac
+	-------------------------------------------------------------------
+#######################################################################
+Functions definition:
+
+	-------------------------------------------------------------------
+	function_name () {
+		statements
+	}
+
+	calling a function:
+		foo
+	-------------------------------------------------------------------
+	- passing arguments to function is like passing arguments to a script.
+
+	- when the function is invoked the positional parameters to the script:
+	  $*, $@, $#, $1, $2, ... are replaced by the parameters to the function.
+
+	Exporting function output into a variable:
+		result=$(foo)
+
+	Defining local variables:
+		local var_name="some_value"
+#######################################################################
+--------------------MISC Commands--------------------------------------
+exec <command_with_parameters>			execute a command end after that terminate current shell
+exec 3< afile					changing file descriptors, file descriptor 3 is opened for reading from afile
+exit n						exit the shell with exit code - n (can be used as script return value)
+date +%Y					show current year
+shift						move all parameters down by 1: $3 becomes $2, $2 becomes $1 and so on
+trap -l						show trap signalls available and define there handling
+trap 'shell_command' INT			change the SIGINT signal handling to a specified shell command
+sh -n/v/x <script_name>				execute script with syntax_errors_check/echo_commands_before/echo_commands_after
+

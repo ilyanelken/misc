@@ -1,0 +1,50 @@
+Opensm running parameters:
+
+	-p						setting SM priority (values : 0-15)
+
+	-B						running in background
+	
+	-F [file_name]			path to "opensm.config" file
+	
+	-V						maximum verbosity
+
+	-D 0x43					medium verbosity
+	
+	-c [file_name]			generate default "opensm.config" file and exit
+	
+	-f [file_name]			output log file  (can be stdout as well to get the log printed as output)
+	
+	-a [file_name]			root guid file to get roots from
+	
+	-o						configuring the subnet once and exit
+	
+	-R[routing_engine]		routing engine exists: updn/dnup/file/ftree/lash/dor/torus-2QoS/tara
+	
+	-e						overwrite the previous log file, if not specified the new log will be attached to the old one
+	
+	-Z 						if specified the multicast tree will be preserved (const mtree, "multicast_optimization" option in config file)
+	
+	-S 						sa_db file (includes MC groups definition)
+	
+	--console local			running opensm in console mode
+	
+	
+When openSM is running:
+
+	kill -s HUP `pidof opensm`  -  sends a trap to openSM and causes heavy sweep
+	kill -1 `pidof opensm		-  the same effect as above
+	
+	OpenSM memory consumption:
+		while : ;do echo "======================" ; ps aux | grep "opensm"; sleep 1; done
+		
+OpenSM environment variables:
+
+	OSM_TMP_DIR				directory for temprary generated files (default: /var/log)
+	
+	OSM_CACHE_DIR			directory for some runtime SM definitions (default: /var/cache/opensm)
+	
+	SIM_HOST				the node the SM is attached to
+	
+Opensm upstream:
+
+	git://beany.openfabrics.org/~halr/opensm.git

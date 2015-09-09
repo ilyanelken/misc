@@ -1,0 +1,391 @@
+---------------------------------------------------------------------------
+
+Recompiling KERNEL:
+
+	cp -r /usr/src/linux.XXX ~
+	cd /root/linux.XXX
+	make mrproper
+	cp /boot/config-`uname –r` ./.config
+	make oldconfig
+	make && make modules && make install && make modules_install
+
+Recompiling KERNEL module:
+
+	cd /root/linux.XXX
+	cp /boot/config-`uname –r` ./.config
+	make oldconfig && make prepare && make modules_prepare
+	make modules SUBDIRS=drivers/infiniband
+	make modules_install SUBDIRS=drivers/infiniband  (execute before:  mv /lib/modules/`uname -r` /lib/modules/`uname r`.bak)
+
+---------------------------------------------------------------------------
+Execute a command periodically:
+
+	watch <command>
+
+---------------------------------------------------------------------------
+Execute the same command on multiple machines:
+
+	pdsh -w <machhine_names_list> '<command>'
+
+---------------------------------------------------------------------------
+IPoIB tricks:
+
+	ifconfig ib1 192.168.1.xxx netmask 255.255.255.0 up                    configuring new inteface
+
+---------------------------------------------------------------------------
+GDB:
+
+	gdb -c <core_file> <binary_path>
+
+	Commands:
+	bt				show backtrace
+	f <num>				go to s specific frame
+	info locals			show all local variables of current frame
+	info args			show all arguments of current frame
+	info breakpoints		show all break points
+	del #num			delete breakpoints
+	p <pointer>			show pointer content (p/a - printing in hex)
+	x <variable>			show variable value
+
+	break <file_name>:<line>	create break point
+	run				run the program till break point
+	c				continue running till the next break point
+	step				step to the next command
+	info threads			show all threads running
+	thread <thread_num>		switch to a specific thread
+	list				show the code lines
+	set print pretty on		turn on indentations when print
+	set logging on			set logging of all gdb commands (gdb.txt)
+
+
+---------------------------------------------------------------------------
+Linux file permissions:
+
+	chmod [options]				change file permissions
+
+	Permissions format:
+
+		  - rwx rwx rwx
+
+	[1] Dir/File/Link
+	[2] User permissions
+	[3] Group permissions
+	[4] Other permissions
+
+	Users:				Modes:
+
+		u - User		r - read (4)
+		g - Group		w - write (2)
+		0 - Other		x - execute (1)
+		a - All
+
+	Example:
+
+		chmod u=rwx,go=rx first.sh
+		chmod 755 first.sh
+		chmod u+x first.sh
+
+---------------------------------------------------------------------------
+Text Redirection
+
+	0 - stdin
+	1 - stdout
+	2 - stderr (redirection operator: 2> )
+
+	>		redirect stdout only (overwrite existing file)
+	>>		redirect stdout only (append to existing file)
+	>&		redirect stdout & stderr
+	>&!		redirect stdout & stderr (overwrite existing file)
+
+	cat file1 |& grep "xyz"		-	the grep takes input from cat stdout & stderr
+
+---------------------------------------------------------------------------
+SORT
+
+	sort [options] [files]
+
+	flags:
+		-b - ignore leading spaces and tabs
+		-d - sort in dictionary order (ignore punctuation)
+		-n - sort in numerical order
+		-r - reverse the order of the sort
+		-k <n> - sort by the n column (first column is 1)
+		-u - output only unique lines (skip the duplicates)source
+
+---------------------------------------------------------------------------
+MUTT important flags:
+
+	Check Mail:  ctrl-G
+
+	-s"subject of the email" - add the email subject
+	-c - add a cc_address
+	-b - add a bcc_adress
+
+---------------------------------------------------------------------------
+CUT (parsing lines of input):
+
+	cut [options] files
+
+	flags:
+		-d":" - the delimiter (in this case: ":")
+		-f list - chosing the list of fields in each line (example: -f1,2,5-7)
+		-c list - chosing the chars by list specified in each line (example: -c1-3,5,8)
+		--output-delimiter="new_delimiter" - use different delimiter for the output (default is the input one)
+
+---------------------------------------------------------------------------
+GREP (General Regular Expression Parser):
+
+	grep [options] [^]word [files]
+
+	flags:
+		-b - print the block(byte offset) of each line
+		-c - print only the number of lines that were found
+		-h - print only the lines without the file_name
+		-i - ignore Upper/Lower case distinctions
+		-l - print the file_name without it's line
+		-n - print the lines and their numbers in files
+		-v - print lines without the string
+		-w - print the lines with exact word and not sub-stringgdb -c
+		-A <num> - show num lines after the string (including the string line)
+		-B <num> - show num lines before the string (including the string line)
+		^word - print the lines starting with "word"
+		"word1 word2" - used for expressions with more that 1 word
+
+	special case:
+
+		egrep "str1|str2|str3" <file_name>		show all lines with str1 or str2 or str3
+		fgrep -f <str_file> <file>				show all lines with strings from str_file
+
+---------------------------------------------------------------------------
+Text commands and redirections:
+
+	tee - copy stdin to all files specified and the stdout
+
+	Redirection operators:
+		> - write stdout to file
+		2> - write stderr to file
+		>> - appending stdout data to file
+
+---------------------------------------------------------------------------
+Tar/Gzip:
+
+	create tarball: tar -cvf dest_file.tar [the files to be assembled]
+	compress:  tar -czvf dest_name.tar.gzip [the files to be compressed]
+	de-compress:  tar -zxvpf source_name.tar.gzip
+
+	flags:
+		-c - create
+		-z - unzip the file first
+		-x - extract the files from the tarball
+		-v - verbose (i.e. tells you what files it's extracting)
+		-p - preserve dates, permissions of the original files
+		-f - use the file in the question (if not specified nothing happens)
+
+---------------------------------------------------------------------------
+Reading the executables or libraries calls:
+
+	nm (the name of the lib or .exe file)
+
+	calls attributes:
+		A - Global absolute symbol
+		a - Local absulute symbol
+		B - Global bss symbol
+		b - Local bss symbol
+		D - Global data symbol
+		d - Local data symbol
+		f - Source file name symbol
+		L - Global thread-local symbol (TLS)
+		l - Static thread-local symbol (TLS)
+		T - Global text symbol
+		t - Local text symbol
+		U - Undefined symbol
+
+###################APPENDIX##############################
+------------------Usefull Commands-----------------------
+gcc -E -dM - < /dev/null					get default definitions
+
+expand -t <tabs_number>						convert tabs to spaces
+
+who -r								determine current OS run level
+
+find ./ -name <file_pattern>					find files with specified pattern in directory
+
+mknod <file_name> c/b <major_num> <minor_num>			creating character or block special file
+
+paste <file_1> <file_2>						merging 2 files by columns
+
+chown -R <user_name> <folder_name>				recursive change folder owner
+
+scp <file_name> user@server:<path on the server>		copy files from server to server
+
+free -k/m/g							show the used/free space in KB/MB/GB
+
+uname -a							show the host information
+
+set								show all environment variables defined
+
+man hier							show Linux directories hierarchy manual
+
+echo -n -e <some_string>					-n : no new line at the end. -e : \t,\c,\n execution within string enabled
+
+read <var_name>							reads data from stdin to a specified variable
+
+/dev/null							virtual file that all text that is redirected to it is discarded
+
+rsh <host_name> <command>					execute command on a remote host
+
+paste -d" " <file_1> <file_2>					merge lines of files using a specified delimiter
+
+source <file_name>						execute all lines as shell commands in a given file
+
+cat <file_name> | mail -s "subject" <mail_address>		send an email
+
+rev <file_name>							inverse the order of letters in each line
+
+sed 's/string1/string2/g' <file_name>				replace string1 with string2 in a given file
+
+cat <file_name> | tr A-Z a-z					uppercase to lowercase transform
+
+sdiff -s <file_name_1> <file_name_2>				show the differences between 2 files side by side (diff <file_1> <file_2> -y   even better effect)
+
+sort <file_name> | uniq -c | sort -nr				creating a sorted histogram (pareto) of words
+
+tail +n <file_name>						show lines n+1 to end
+
+head/tail -n <file_name>					show first/last n lines
+
+cp -p <file_name> <dest_dir>					copy the file and retain the same time stamp
+
+ln -s <shared_dir_path> <new_dir_alias>				create link to a remote directory
+
+unix2dos/dos2unix <file_name>					change the text file format between DOS and UNIX
+
+tailf <file_name>						show the updated file tail
+
+locate <file name>						finds the specified file location
+
+cd -								going to the previous directory
+
+gdb <path of the binaries> -c <core_name>			debugging segmentation fault  (bt - afterwards)
+
+rpm -i <package_path>						installing a specified package
+
+rpm -e <package name>						uninstalling a specified package
+
+ldd <path>							show the list of libraries used by the executable file
+
+which <executable file>						findout the .exe path
+
+wget [url address]						download files from the internet
+
+uname -a							print certain system information.
+
+yum install [package name]					installing a new package (can be done only with root permissions). YUM = Yellowdog Updater Modified
+
+ctags -R							create the "ctags" file in current directory (get inside: ctrl-], get back: ctrl-t)
+
+cal								show the calendar of a specified year/month (example: cal 06 2012)
+
+du								Disk Usage (use with -h flag for normal file size format)
+
+env								get all defined  environment variables
+
+touch								changing date/time of file (touch -t 05070915 my_report.txt - May 7 09:15)
+
+find <start-dir> -name <string>					search for files in specified path
+
+date								show current date and time
+
+wc								count lines/words/chars from stdin. Flags  (-l/-w/-c)
+
+history								show the command history (!num - run the command with num index)
+
+----------------Envorinment Variables--------------------
+Defining a variable:
+	export LD_PRELOAD=./ibsim/lib.....
+
+Un-defining a variable:
+	unset LD_PRELOAD
+
+
+LD_LIBRARY_PATH			the first path to look for shared libs
+
+LD_PRELOAD			a single shared library to be used
+
+PATH				the paths to look for binaries
+
+
+Linux built-in variables:
+
+	$HOME			user home directory
+	$PS1			command promt
+	$PS2			secondary promt, used for additional input (usually >)
+	$IFS			an input field separator (usually space)
+	$0			the name of the shell script
+	$#			the number of parameters passed
+	$$			the process ID of the shell script, often used for generating unique tmp files: /tmp/tmp_file_$$
+
+----------------Converting TAR file to RPM--------------
+
+	rpmbuild -ts --nodeps <tar_ball_name>
+	rpm -i <srpm_name>
+	rpmbuild --rebuild <srpm_file_name> (--define "configure_options  --with-ibutils2=/usr --with-osm=$OPENSM_INSTALL ")
+	or
+	rpmbuild -bb <spec_file>
+
+	Reverse engineering:
+	rpm2cpio <RPM FILE> | cpio -ivd
+
+-------------Compiling and installing a GNU project------
+./autogen.sh  && ./configure --prefix=[the path for installation]  [config options]
+
+make && make install
+
+-------------GCC Flags and Tricks------------------------
+gcc <src_file_name> -o <target_executable_name>		basic source file compilation
+
+Flags:
+
+	-I<include_directory>			additional directory for containing the include files
+	-L<lib_directory>			additional directory for containing the library files(.so/.sa - shared libs; .a - static libs (archive))
+	-l[lib_name]				the wanted lib name that appears like: lib[lib_name].so/sa/a
+	-c					preventing the compiler from creating complete program (object files will be created)
+
+Creating new LIB (static/shared) files:
+
+	ar crv <target_name: libfoo.a> <object_file_name>		creating static (archive) library
+
+MISC commands:
+
+	nm	<lib_name>		show all the functions defined in the specified library
+	f #n				go to frame number #n
+	info locals			show all local variables in a chosen frame
+	set args <arguments>		setting arguments for executed programm
+
+-------------Ex-VIM Configuration------------------------
+
+[1] git clone https://github.com/jwu/exvim.git
+
+[2] Copy the 2 directories: toolkit && vimfiles  to the vim shared dir. (in my case it was /usr/share/vim/)
+
+[3] Add the following line to the .vimrc file: let g:ex_toolkit_path=’/usr/share/vim/toolkit’ (the path to the new toolkit place)
+
+[4] Enter the project root dir and execute: vim project_name.vimentry
+
+[6] Press <leader>R (“\R”)
+
+[7] Run :Up
+
+
+-------------Configurating MUTT Mailbox------------------
+The packages and config files that have to appear:
+
+	procmail  -  should be installed
+	fetchmail -  yum install fetchmail
+	msmtp     -  git clone git://msmtp.git.sourceforge.net/gitroot/msmtp/msmtp; autoreconf -i; make && make install
+		     (the "texinfo" package will be needed: yum install texinfo)
+
+	muttrc    - just config file should be copied
+
+	my user name and password:			user 'ilyan@dev.mellanox.co.il' password '11M*******11'
+
