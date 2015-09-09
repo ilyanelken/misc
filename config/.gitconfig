@@ -1,0 +1,29 @@
+[user]
+        name = Ilya Nelkenbaum
+        email = ilyan@mellanox.com
+
+[sendemail]
+	from = Ilya Nelkenbaum <ilyan@dev.mellanox.co.il>
+	smtpserver = labmailer.lab.mtl.com
+	smtpserverport = 25
+	multiedit = false
+[push]
+	default = matching
+[core]
+	editor = vim
+	pager = less -FXRS -x4
+	whitespace = trailing-space,space-before-tab
+
+[alias]
+	fixRM = log --date=short --pretty='Commit: %H0Subject: %s0The author: %an0Date: %ad0See on: https://github.com/hnrose/ibssa2/commit/%H0'
+	graph = log --graph --pretty=format:'%C(red)%h%Creset%C(red bold)%d%Creset %s %Cblack(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	st = status
+	co = checkout
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+[apply]
+	whitespace = fix
