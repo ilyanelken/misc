@@ -1,3 +1,16 @@
+Install and run regression:
+
+	(1) cd /opt
+
+	(2) git clone /.autodirect/mtrsysgwork/danielk/regression.git
+
+	(3) cd regression
+
+	(4) ./install.sh
+
+	(5) ./regression.py -o <regression target>
+
+
 Running ib_mgtsim simulator:
 
 	/opt/regression/usr/share/ibmgtsim2.1.1/tests/run_ibmgtsim.py -t /tmp/ilyan/meld_fab.topo
