@@ -28,3 +28,4 @@ source ~/bin/git-completion.sh
 source ~/bin/git-flow-completion.sh
 export PATH=/usr/local/lib:/usr/local/lib64:$PATH
 export PDSH_RCMD_TYPE=ssh
+

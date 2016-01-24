@@ -33,3 +33,9 @@ autocmd BufWinLeave * call clearmatches()
 " Side bar
 call pathogen#infect()
 nmap <F2> :TagbarToggle<CR>
+
+" Nerd tree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+map <C-n> :NERDTreeToggle<CR>
