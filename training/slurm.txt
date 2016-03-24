@@ -1,0 +1,25 @@
+SLURM - Job Manager
+-------------------
+
+# Allocate job:
+
+	salloc  -N <number of nodes>
+		-w <list of nodes: vegas[13,35-36]>
+		-t <reservation time]
+		-p <partition name>
+
+# Run job:
+
+	srun    -N <number of nodes>
+		-w <list of nodes: vegas[13,35-36]>
+		-t <reservation time]
+		-p <partition name>
+		<command to run>
+
+# Get current job details:
+
+	scontrol show jobid <job ID>
+
+# Get all allocation information:
+
+	sinfo / squeue
