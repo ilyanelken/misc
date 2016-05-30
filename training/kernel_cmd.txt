@@ -1,0 +1,60 @@
+
+CONFIGURING LINUX KERNEL COMMAND LINE
+-------------------------------------
+
+1. Getting the default kernel:
+
+	>> grubby --default-kernel
+	/boot/vmlinuz-3.10.0-327.el7.x86_64
+
+
+2. Determine the index:
+
+	>> grubby --default-index
+	0
+
+
+3. Dump all info for the given entry:
+
+	>> grubby --info /boot/vmlinuz-3.10.0-327.el7.x86_64
+	index=0
+	kernel=/boot/vmlinuz-3.10.0-327.el7.x86_64
+	args="ro crashkernel=auto LANG=en_US.UTF-8 vga=normal nomodeset 3"
+	root=UUID=fdd3d253-dd70-44da-94d7-82966a41213e
+	initrd=/boot/initramfs-3.10.0-327.el7.x86_64.img
+	title=Red Hat Enterprise Linux Server (3.10.0-327.el7.x86_64) 7.2 (Maipo)
+
+
+4. Add arguments to be passed to kernel command line:
+
+	>> grubby --args="isolcpus=1-27 nohz_full=1-27 rcu_nocbs=1-27" --update-kernel /boot/vmlinuz-3.10.0-327.el7.x86_64
+
+
+5. Check that the changes were made:
+
+	>> grubby --info /boot/vmlinuz-3.10.0-327.el7.x86_64
+	index=0
+	kernel=/boot/vmlinuz-3.10.0-327.el7.x86_64
+	args="ro crashkernel=auto LANG=en_US.UTF-8 vga=normal nomodeset 3 isolcpus=1-27 nohz_full=1-27 rcu_nocbs=1-27"
+	root=UUID=fdd3d253-dd70-44da-94d7-82966a41213e
+	initrd=/boot/initramfs-3.10.0-327.el7.x86_64.img
+	title=Red Hat Enterprise Linux Server (3.10.0-327.el7.x86_64) 7.2 (Maipo)
+
+6. Remove arguments:
+
+	>> grubby --remove-args="isolcpus=1-27 nohz_full=1-27 rcu_nocbs=1-27" --update-kernel /boot/vmlinuz-3.10.0-327.el7.x86_64
+
+
+7. Reboot
+
+
+8. Verify changes:
+
+	>> cat /proc/cmdline
+	BOOT_IMAGE=/vmlinuz-3.10.0-327.el7.x86_64 root=UUID=fdd3d253-dd70-44da-94d7-82966a41213e ro crashkernel=auto LANG=en_US.UTF-8 vga=normal nomodeset 3 isolcpus=1-27 nohz_full=1-27 rcu_nocbs=1-27
+
+
+Linux kernel parameters can be found here:
+
+	https://www.kernel.org/doc/Documentation/kernel-parameters.txt
+
