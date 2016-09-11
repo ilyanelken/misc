@@ -1,3 +1,8 @@
+Create new tag:
+
+	git tag <tag>
+	git push --tags <repo_name> <tag>
+
 Working with GIT notes:
 
 	git notes add							add notes to head commit
