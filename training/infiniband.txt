@@ -1,3 +1,16 @@
+Build HPC:
+
+	(1) mkdir -p /tmp/hpcx_temp/build_area
+
+	(2) cd /tmp/hpcx_temp/build_area
+
+	(3) git clone /auto/mswg/git/hpc/hpc-internal-tools.git
+
+	(4) cd hpc-internal-tools/tools/hpcx
+
+	(5) bash -xv ./hpcx.sh --skip-compiler-icc --skip-building-bupc /tmp/hpcx_temp/build_area
+
+
 Install and run regression:
 
 	(1) cd /opt
