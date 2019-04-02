@@ -10,5 +10,4 @@ sudo reboot
 #
 # Install CUDA
 #
-sudo apt install nvidia-cuda-toolkit gcc-6
-nvcc --version
+https://www.tensorflow.org/install/gpu
