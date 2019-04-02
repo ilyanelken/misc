@@ -1,0 +1,14 @@
+#
+# Install GPU drivers
+#
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt update
+sudo ubuntu-drivers autoinstall
+
+sudo reboot
+
+#
+# Install CUDA
+#
+sudo apt install nvidia-cuda-toolkit gcc-6
+nvcc --version
